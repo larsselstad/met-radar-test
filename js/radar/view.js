@@ -1,64 +1,55 @@
 var dom = require('../dom');
+var SelectElement = require('./selectElement');
 
-function onChange(model, key, cb) {
-    return function(evt) {
-        model[key] = evt.target.value;
-
-        cb();
-    };
-}
-
-module.exports = function(available) {
+module.exports = function(model, available) {
     var view = Object.create(null);
-    var model = {};
+
+    var sites = new SelectElement('Site', 'radarsite', available.getRadarSites());
+    var types = new SelectElement('Type', 'type');
+    var contents = new SelectElement('Content', 'content');
+    var size = new SelectElement('Size', 'size');
 
     view.el = dom.el('div', {
-        class: 'radar-box'
+        class: 'radar-box',
+        children: [
+            sites.el,
+            types.el,
+            contents.el,
+            size.el
+        ]
     });
 
-    function addSelect(label, name, options, cb) {
-        var div = dom.el('div', {
-            class: 'base-grid',
-            children: [
-                dom.el('label', {
-                    for: name,
-                    text: label
-                }),
-                dom.select({
-                    name: name,
-                    id: name,
-                    options: options,
-                    changeFn: cb
-                })
-            ]
-        });
+    view.el.addEventListener('change', function (evt) {
+        console.log(evt);
 
-        view.el.appendChild(div);
-    }
+        if (evt.target.name === 'radarsite') {
+            model.setRadarsite(evt.target.value);
 
-    view.showSites = function showSites() {
-        view.el.innerHTML = '';
+            types.setOptions(available.getTypesForSite(model.getRadarSite()));
+        }
 
-        addSelect('Site', 'radarsite', available.getRadarSites(), onChange(model, 'site', view.showTypes));
-    };
+        if (evt.target.name === 'type') {
+            model.setType(evt.target.value);
 
-    view.showTypes = function() {
-        addSelect('Type', 'type', available.getTypesForSite(model.site), onChange(model, 'type', view.showContents));
-    };
+            contents.setOptions(available.getContentsForSite(model.getRadarSite()));
+        }
 
-    view.showContents = function() {
-        addSelect('Content', 'content', available.getContentsForSite(model.site), onChange(model, 'content', view.showSizes));
-    };
+        if (evt.target.name === 'content') {
+            model.setContent(evt.target.value);
 
-    view.showSizes = function() {
-        addSelect('Size', 'size', available.getSizesForSite(model.site), onChange(model, 'size', view.showImage));
-    };
+            size.setOptions(available.getSizesForSite(model.getRadarSite()));
+        }
 
-    view.showImage = function () {
-        view.el.innerHTML = '';
+        if (evt.target.name === 'size') {
+            model.setSize(evt.target.value);
 
-        view.el.appendChild(dom.image(model));
-    };
+            // view.el.innerHTML = '';
+
+            view.el.appendChild(dom.radarImage({
+                parameters: model.parameters()
+            }));
+        }
+    });
 
     return view;
 };
