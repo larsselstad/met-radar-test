@@ -47,33 +47,17 @@ module.exports = {
     el: el,
     option: option,
     select: function(params) {
-        var optionsNodes = params.options.map(function(site) {
-            return option(site, site);
-        });
-
-        optionsNodes.unshift(option('', '-- Velg noe --'));
-
         var select = el('select', {
             name: params.name,
-            id: params.id,
-            children: optionsNodes
+            id: params.id
         });
-
-        select.addEventListener('change', params.changeFn);
 
         return select;
     },
-    image: function(params) {
+    radarImage: function(params) {
         var img = new Image();
 
-        var uri = [
-            'radarsite=' + params.site,
-            'type=' + params.type,
-            'content=' + params.content,
-            'size=' + params.size
-        ];
-
-        img.src = "http://api.met.no/weatherapi/radar/1.5/?" + uri.join(';');
+        img.src = "http://api.met.no/weatherapi/radar/1.5/?" + params.parameters.join(';');
 
         return img;
     }
