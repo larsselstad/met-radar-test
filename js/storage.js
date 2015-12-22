@@ -2,7 +2,7 @@ var KEY = 'model';
 
 module.exports = {
     save: function (model) {
-        localStorage.setItem(KEY, JSON.stringify(model.getValues()));
+        localStorage.setItem(KEY, JSON.stringify(model));
     },
     get: function () {
         var values = localStorage.getItem(KEY);
@@ -13,4 +13,4 @@ module.exports = {
 
         return null;
     }
-}
+};

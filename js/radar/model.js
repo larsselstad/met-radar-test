@@ -6,45 +6,56 @@ function Model(values) {
     }
 }
 
-Model.prototype.setRadarsite = function (radarsite) {
+Model.prototype.setRadarsite = function(radarsite) {
     this.values.radarsite = radarsite;
 };
 
-Model.prototype.setType = function (type) {
+Model.prototype.setType = function(type) {
     this.values.type = type;
 };
 
-Model.prototype.setContent = function (content) {
+Model.prototype.setContent = function(content) {
     this.values.content = content;
 };
 
-Model.prototype.setSize = function (size) {
+Model.prototype.setSize = function(size) {
     this.values.size = size;
 };
 
-Model.prototype.getRadarSite = function () {
+Model.prototype.getRadarSite = function() {
     return this.values.radarsite;
 };
 
-Model.prototype.getType = function () {
+Model.prototype.getType = function() {
     return this.values.type;
 };
 
-Model.prototype.getContent = function () {
+Model.prototype.getContent = function() {
     return this.values.content;
 };
 
-Model.prototype.getSize = function () {
+Model.prototype.getSize = function() {
     return this.values.size;
 };
 
-Model.prototype.parameters = function () {
-    return [
-        'radarsite=' + this.values.radarsite,
-        'type=' + this.values.type,
-        'content=' + this.values.content,
-        'size=' + this.values.size
-    ];
+Model.prototype.parameters = function() {
+    if ((this.values.radarsite && this.values.radarsite !== '') &&
+        (this.values.type && this.values.type !== '') &&
+        (this.values.content && this.values.content !== '') &&
+        (this.values.size && this.values.size !== '')) {
+        return [
+            'radarsite=' + this.values.radarsite,
+            'type=' + this.values.type,
+            'content=' + this.values.content,
+            'size=' + this.values.size
+        ];
+    } else {
+        return null;
+    }
+};
+
+Model.prototype.getValues = function() {
+    return this.values;
 };
 
 module.exports = Model;

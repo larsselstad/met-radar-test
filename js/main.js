@@ -4,6 +4,7 @@ var dom = require('./dom');
 var Available = require('./available');
 var radarView = require('./radar/view.js');
 var Model = require('./radar/model.js');
+var storage = require('./storage');
 
 var xml = fs.readFileSync('a.xml', {encoding: 'utf8'});
 
@@ -16,7 +17,11 @@ parseString(xml, function(err, result) {
 
     var available = new Available(queries);
 
-    var rv = radarView(new Model(), available);
+    var storedValues = storage.get();
+
+    var model = new Model(storedValues);
+
+    var rv = radarView(model, available);
 
     document.querySelector('body').appendChild(rv.el);
 });

@@ -57,7 +57,9 @@ module.exports = {
     radarImage: function(params) {
         var img = new Image();
 
-        img.src = "http://api.met.no/weatherapi/radar/1.5/?" + params.parameters.join(';');
+        if (params.parameters) {
+            img.src = "http://api.met.no/weatherapi/radar/1.5/?" + params.parameters.join(';');
+        }
 
         return img;
     }

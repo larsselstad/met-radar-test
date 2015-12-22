@@ -1,5 +1,6 @@
 var dom = require('../dom');
 var SelectElement = require('./selectElement');
+var storage = require('../storage');
 
 module.exports = function(model, available) {
     var view = Object.create(null);
@@ -9,13 +10,18 @@ module.exports = function(model, available) {
     var contents = new SelectElement('Content', 'content');
     var size = new SelectElement('Size', 'size');
 
+    var radarImage = dom.radarImage({
+        parameters: model.parameters()
+    });
+
     view.el = dom.el('div', {
         class: 'radar-box',
         children: [
             sites.el,
             types.el,
             contents.el,
-            size.el
+            size.el,
+            radarImage
         ]
     });
 
@@ -46,11 +52,9 @@ module.exports = function(model, available) {
         if (evt.target.name === 'size') {
             model.setSize(evt.target.value);
 
-            // view.el.innerHTML = '';
+            storage.save(model.getValues());
 
-            view.el.appendChild(dom.radarImage({
-                parameters: model.parameters()
-            }));
+            radarImage.src = "http://api.met.no/weatherapi/radar/1.5/?" + model.parameters().join(';');
         }
     });
 
