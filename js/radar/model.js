@@ -26,6 +26,18 @@ Model.prototype.getRadarSite = function () {
     return this.values.radarsite;
 };
 
+Model.prototype.getType = function () {
+    return this.values.type;
+};
+
+Model.prototype.getContent = function () {
+    return this.values.content;
+};
+
+Model.prototype.getSize = function () {
+    return this.values.size;
+};
+
 Model.prototype.parameters = function () {
     return [
         'radarsite=' + this.values.radarsite,

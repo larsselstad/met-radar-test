@@ -19,26 +19,28 @@ module.exports = function(model, available) {
         ]
     });
 
-    view.el.addEventListener('change', function (evt) {
+    view.el.addEventListener('change', function(evt) {
         if (evt.target.name === 'radarsite') {
+            contents.setOptions([]);
+            size.setOptions([]);
+
             model.setRadarsite(evt.target.value);
 
             types.setOptions(available.getTypesForSite(model.getRadarSite()));
-            contents.setOptions([]);
-            size.setOptions([]);
         }
 
         if (evt.target.name === 'type') {
+            size.setOptions([]);
+
             model.setType(evt.target.value);
 
-            contents.setOptions(available.getContentsForSite(model.getRadarSite()));
-            size.setOptions([]);
+            contents.setOptions(available.getContentsForSite(model.getRadarSite(), model.getType()));
         }
 
         if (evt.target.name === 'content') {
             model.setContent(evt.target.value);
 
-            size.setOptions(available.getSizesForSite(model.getRadarSite()));
+            size.setOptions(available.getSizesForSite(model.getRadarSite(), model.getType(), model.getContent()));
         }
 
         if (evt.target.name === 'size') {
