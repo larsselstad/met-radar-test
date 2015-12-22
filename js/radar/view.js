@@ -20,18 +20,19 @@ module.exports = function(model, available) {
     });
 
     view.el.addEventListener('change', function (evt) {
-        console.log(evt);
-
         if (evt.target.name === 'radarsite') {
             model.setRadarsite(evt.target.value);
 
             types.setOptions(available.getTypesForSite(model.getRadarSite()));
+            contents.setOptions([]);
+            size.setOptions([]);
         }
 
         if (evt.target.name === 'type') {
             model.setType(evt.target.value);
 
             contents.setOptions(available.getContentsForSite(model.getRadarSite()));
+            size.setOptions([]);
         }
 
         if (evt.target.name === 'content') {
