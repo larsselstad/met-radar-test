@@ -1,13 +1,39 @@
 var dom = require('../dom');
 var SelectElement = require('./selectElement');
 
+function isSet(value) {
+    return value && value !== '';
+}
+
+function radarImageSrc(values) {
+    if (!isSet(values.radarsite) ||
+        !isSet(values.type) ||
+        !isSet(values.content) ||
+        !isSet(values.size)) {
+        return;
+    }
+
+    var parameters = [
+        'radarsite=' + values.radarsite,
+        'type=' + values.type,
+        'content=' + values.content,
+        'size=' + values.size
+    ];
+
+    return "http://api.met.no/weatherapi/radar/1.5/?" + parameters.join(';');
+}
+
 module.exports = function(model, available) {
     var view = Object.create(null);
 
-    var sites = new SelectElement('Site', 'radarsite', available.getRadarSites());
+    var sites = new SelectElement('Site', 'radarsite');
     var types = new SelectElement('Type', 'type');
     var contents = new SelectElement('Content', 'content');
     var size = new SelectElement('Size', 'size');
+
+    var radarImage = dom.image({
+        src: radarImageSrc(model.getValues())
+    });
 
     view.el = dom.el('div', {
         class: 'radar-box',
@@ -15,42 +41,72 @@ module.exports = function(model, available) {
             sites.el,
             types.el,
             contents.el,
-            size.el
+            size.el,
+            radarImage
         ]
     });
 
+    if (model.saved) {
+        sites.setOptions(model.getRadarsiteOptions(), model.getRadarSite());
+        types.setOptions(model.getTypeOptions(), model.getType());
+        contents.setOptions(model.getContentOptions(), model.getContent());
+        size.setOptions(model.getSizeOptions(), model.getSize());
+    } else {
+        var radarsites = available.getRadarSites();
+
+        model.setRadarsiteOptions(radarsites);
+
+        sites.setOptions(radarsites);
+        types.setOptions();
+        contents.setOptions();
+        size.setOptions();
+    }
+
+    function setTypes(options) {
+        model.setTypeOptions(options);
+        types.setOptions(options);
+    }
+
+    function setContents(options) {
+        model.setContentOptions(options);
+        contents.setOptions(options);
+    }
+
+    function setSize(options) {
+        model.setSizeOptions(options);
+        size.setOptions(options);
+    }
+
     view.el.addEventListener('change', function(evt) {
         if (evt.target.name === 'radarsite') {
-            contents.setOptions([]);
-            size.setOptions([]);
+            setContents([]);
+            setSize([]);
 
             model.setRadarsite(evt.target.value);
 
-            types.setOptions(available.getTypesForSite(model.getRadarSite()));
+            setTypes(available.getTypesForSite(model.getRadarSite()));
         }
 
         if (evt.target.name === 'type') {
-            size.setOptions([]);
+            setSize([]);
 
             model.setType(evt.target.value);
 
-            contents.setOptions(available.getContentsForSite(model.getRadarSite(), model.getType()));
+            setContents(available.getContentsForSite(model.getRadarSite(), model.getType()));
         }
 
         if (evt.target.name === 'content') {
             model.setContent(evt.target.value);
 
-            size.setOptions(available.getSizesForSite(model.getRadarSite(), model.getType(), model.getContent()));
+            setSize(available.getSizesForSite(model.getRadarSite(), model.getType(), model.getContent()));
         }
 
         if (evt.target.name === 'size') {
             model.setSize(evt.target.value);
 
-            // view.el.innerHTML = '';
+            model.save();
 
-            view.el.appendChild(dom.radarImage({
-                parameters: model.parameters()
-            }));
+            radarImage.src = radarImageSrc(model.getValues());
         }
     });
 
