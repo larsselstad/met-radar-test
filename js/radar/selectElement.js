@@ -20,7 +20,7 @@ function addStartOption(select) {
     select.appendChild(dom.option('', '-- Velg noe --'));
 }
 
-function SelectElement(label, name, options) {
+function SelectElement(label, name) {
     this.el = dom.el('div', {
         class: 'base-grid',
         children: [
@@ -34,11 +34,9 @@ function SelectElement(label, name, options) {
             })
         ]
     });
-
-    this.setOptions(options);
 }
 
-SelectElement.prototype.setOptions = function(options) {
+SelectElement.prototype.setOptions = function(options, selected) {
     this.select.innerHTML = '';
 
     if (!options) {
@@ -55,8 +53,12 @@ SelectElement.prototype.setOptions = function(options) {
         this.select.appendChild(dom.option(option, option));
     }, this);
 
-    if (options.length === 1) {
+    if (options.length === 1 && !selected) {
         this.select.dispatchEvent(changeEvent());
+    }
+
+    if (selected) {
+        this.select.value = selected;
     }
 };
 
