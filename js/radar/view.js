@@ -2,6 +2,28 @@ var dom = require('../dom');
 var SelectElement = require('./selectElement');
 var storage = require('../storage');
 
+function isSet(value) {
+    return value && value !== '';
+}
+
+function radarImageSrc(values) {
+    if (!isSet(values.radarsite) ||
+        !isSet(values.type) ||
+        !isSet(values.content) ||
+        !isSet(values.size)) {
+        return;
+    }
+
+    var parameters = [
+        'radarsite=' + values.radarsite,
+        'type=' + values.type,
+        'content=' + values.content,
+        'size=' + values.size
+    ];
+
+    return "http://api.met.no/weatherapi/radar/1.5/?" + parameters.join(';');
+}
+
 module.exports = function(model, available) {
     var view = Object.create(null);
 
@@ -10,8 +32,8 @@ module.exports = function(model, available) {
     var contents = new SelectElement('Content', 'content');
     var size = new SelectElement('Size', 'size');
 
-    var radarImage = dom.radarImage({
-        parameters: model.parameters()
+    var radarImage = dom.image({
+        src: radarImageSrc(model.getValues())
     });
 
     view.el = dom.el('div', {
@@ -27,8 +49,8 @@ module.exports = function(model, available) {
 
     view.el.addEventListener('change', function(evt) {
         if (evt.target.name === 'radarsite') {
-            contents.setOptions([]);
-            size.setOptions([]);
+            contents.setOptions();
+            size.setOptions();
 
             model.setRadarsite(evt.target.value);
 
@@ -36,7 +58,7 @@ module.exports = function(model, available) {
         }
 
         if (evt.target.name === 'type') {
-            size.setOptions([]);
+            size.setOptions();
 
             model.setType(evt.target.value);
 
@@ -54,7 +76,7 @@ module.exports = function(model, available) {
 
             storage.save(model.getValues());
 
-            radarImage.src = "http://api.met.no/weatherapi/radar/1.5/?" + model.parameters().join(';');
+            radarImage.src = radarImageSrc(model.getValues());
         }
     });
 

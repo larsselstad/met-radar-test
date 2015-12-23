@@ -54,11 +54,11 @@ module.exports = {
 
         return select;
     },
-    radarImage: function(params) {
+    image: function(params) {
         var img = new Image();
 
-        if (params.parameters) {
-            img.src = "http://api.met.no/weatherapi/radar/1.5/?" + params.parameters.join(';');
+        if (params.src) {
+            img.src = params.src;
         }
 
         return img;

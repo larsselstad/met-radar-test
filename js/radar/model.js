@@ -38,22 +38,6 @@ Model.prototype.getSize = function() {
     return this.values.size;
 };
 
-Model.prototype.parameters = function() {
-    if ((this.values.radarsite && this.values.radarsite !== '') &&
-        (this.values.type && this.values.type !== '') &&
-        (this.values.content && this.values.content !== '') &&
-        (this.values.size && this.values.size !== '')) {
-        return [
-            'radarsite=' + this.values.radarsite,
-            'type=' + this.values.type,
-            'content=' + this.values.content,
-            'size=' + this.values.size
-        ];
-    } else {
-        return null;
-    }
-};
-
 Model.prototype.getValues = function() {
     return this.values;
 };
