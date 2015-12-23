@@ -22,7 +22,7 @@ function addStartOption(select) {
 
 function SelectElement(label, name) {
     this.el = dom.el('div', {
-        class: 'base-grid',
+        class: 'base-grid select-field',
         children: [
             dom.el('label', {
                 for: name,
@@ -30,7 +30,8 @@ function SelectElement(label, name) {
             }),
             this.select = dom.select({
                 name: name,
-                id: name
+                id: name,
+                class: 'select'
             })
         ]
     });

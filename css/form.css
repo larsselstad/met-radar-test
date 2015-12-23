@@ -1,3 +1,9 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+	padding: 0;
+}
+
 body {
     font-size: 16px;
     font-family: sans-serif;
@@ -8,10 +14,34 @@ body {
 }
 
 .radar-box {
-    border: 1px solid black;
+    border: 3px dotted black;
     padding: 10px;
+    transition: all 0.2s;
+    height: 234px;
+    width: 200px;
+}
+
+.radar-box.image {
+    padding: 0;
+    border-style: solid;
+}
+
+.radar-box.image .select-field{
+    display: none;
 }
 
 label {
     display: block;
+}
+
+.select {
+    transition: all 0.2s;
+}
+
+.select:focus {
+    transform: scale(1.1);
+}
+
+.hide {
+    display: none;
 }

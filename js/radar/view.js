@@ -31,8 +31,26 @@ module.exports = function(model, available) {
     var contents = new SelectElement('Content', 'content');
     var size = new SelectElement('Size', 'size');
 
+    function showImage() {
+        radarImage.classList.remove('hide');
+
+        view.el.removeEventListener('transitionend', showImage);
+    }
+
     var radarImage = dom.image({
-        src: radarImageSrc(model.getValues())
+        class: 'hide',
+        onload: function () {
+            view.el.style.height = (radarImage.height + 6) + 'px';
+            view.el.style.width = (radarImage.width + 6) + 'px';
+
+            view.el.addEventListener('transitionend', showImage);
+        }
+    });
+
+    radarImage.addEventListener('click', function () {
+        radarImage.classList.add('hide');
+        view.el.classList.remove('image');
+        view.el.removeAttribute('style');
     });
 
     view.el = dom.el('div', {
@@ -47,6 +65,10 @@ module.exports = function(model, available) {
     });
 
     if (model.saved) {
+        radarImage.src = radarImageSrc(model.getValues());
+
+        view.el.classList.add('image');
+
         sites.setOptions(model.getRadarsiteOptions(), model.getRadarSite());
         types.setOptions(model.getTypeOptions(), model.getType());
         contents.setOptions(model.getContentOptions(), model.getContent());
@@ -103,6 +125,8 @@ module.exports = function(model, available) {
 
         if (evt.target.name === 'size') {
             model.setSize(evt.target.value);
+
+            view.el.classList.add('image');
 
             model.save();
 

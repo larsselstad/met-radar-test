@@ -16,7 +16,7 @@ function el(tag, params) {
     }
 
     if (params.class) {
-        domNode.classList.add(params.class);
+        domNode.className = params.class;
     }
 
     if (params.text) {
@@ -47,18 +47,23 @@ module.exports = {
     el: el,
     option: option,
     select: function(params) {
-        var select = el('select', {
-            name: params.name,
-            id: params.id
-        });
+        var select = el('select', params);
 
         return select;
     },
     image: function(params) {
         var img = new Image();
 
+        if (params.onload) {
+            img.onload = params.onload;
+        }
+
         if (params.src) {
             img.src = params.src;
+        }
+
+        if (params.class) {
+            img.className = params.class;
         }
 
         return img;
