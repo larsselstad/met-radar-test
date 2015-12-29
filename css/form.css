@@ -26,6 +26,24 @@ body {
     border-style: solid;
 }
 
+.radar-box.loading {
+    animation: background-blink 1.3s infinite;
+}
+
+@keyframes background-blink {
+    0 {
+        background-color: inherit;
+    }
+
+    50% {
+        background-color: #aaa;
+    }
+
+    100% {
+        background-color: inherit;
+    }
+}
+
 .radar-box.image .select-field{
     display: none;
 }

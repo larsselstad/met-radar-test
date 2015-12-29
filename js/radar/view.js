@@ -20,6 +20,8 @@ module.exports = function(model, available) {
         view.el.style.height = (imgHeight + 6) + 'px';
         view.el.style.width = (imgWidth + 6) + 'px';
 
+        view.el.classList.remove('loading');
+
         view.el.addEventListener('transitionend', showImage);
     }, function () {
         view.el.classList.remove('image');
@@ -38,6 +40,8 @@ module.exports = function(model, available) {
     });
 
     function setImage() {
+        view.el.classList.add('loading');
+
         radarImage.src(model.getValues());
 
         view.el.classList.add('image');
