@@ -24,6 +24,8 @@ module.exports = function(model, available) {
 
         view.el.addEventListener('transitionend', showImage);
     }, function () {
+        model.unsave();
+
         view.el.classList.remove('image');
         view.el.removeAttribute('style');
     });

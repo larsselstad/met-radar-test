@@ -92,4 +92,8 @@ Model.prototype.save = function() {
     });
 };
 
+Model.prototype.unsave = function() {
+    storage.unsave();
+};
+
 module.exports = Model;
