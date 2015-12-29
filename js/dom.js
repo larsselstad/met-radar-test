@@ -58,6 +58,10 @@ module.exports = {
             img.onload = params.onload;
         }
 
+        if (params.onclick) {
+            img.onclick = params.onclick;
+        }
+
         if (params.src) {
             img.src = params.src;
         }
