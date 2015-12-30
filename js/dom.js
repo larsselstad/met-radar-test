@@ -11,12 +11,12 @@ function el(tag, params) {
         domNode.id = params.id;
     }
 
-    if (params.value) {
+    if (params.value !== undefined) {
         domNode.value = params.value;
     }
 
     if (params.class) {
-        domNode.classList.add(params.class);
+        domNode.className = params.class;
     }
 
     if (params.text) {
@@ -47,18 +47,42 @@ module.exports = {
     el: el,
     option: option,
     select: function(params) {
-        var select = el('select', {
-            name: params.name,
-            id: params.id
-        });
+        var select = el('select', params);
+
+        select.required = true;
 
         return select;
+    },
+    button: function(params) {
+        params.class = params.class ? 'btn ' + params.class : 'btn';
+
+        var btn = el('button', params);
+
+        if (params.type) {
+            btn.type = params.type;
+        } else {
+            btn.type = 'submit';
+        }
+
+        return btn;
     },
     image: function(params) {
         var img = new Image();
 
+        if (params.onload) {
+            img.onload = params.onload;
+        }
+
+        if (params.onclick) {
+            img.onclick = params.onclick;
+        }
+
         if (params.src) {
             img.src = params.src;
+        }
+
+        if (params.class) {
+            img.className = params.class;
         }
 
         return img;

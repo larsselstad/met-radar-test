@@ -1,27 +1,6 @@
 var dom = require('../dom');
 var SelectElement = require('./selectElement');
-
-function isSet(value) {
-    return value && value !== '';
-}
-
-function radarImageSrc(values) {
-    if (!isSet(values.radarsite) ||
-        !isSet(values.type) ||
-        !isSet(values.content) ||
-        !isSet(values.size)) {
-        return;
-    }
-
-    var parameters = [
-        'radarsite=' + values.radarsite,
-        'type=' + values.type,
-        'content=' + values.content,
-        'size=' + values.size
-    ];
-
-    return "http://api.met.no/weatherapi/radar/1.5/?" + parameters.join(';');
-}
+var RadarImage = require('./radarImage');
 
 module.exports = function(model, available) {
     var view = Object.create(null);
@@ -31,22 +10,62 @@ module.exports = function(model, available) {
     var contents = new SelectElement('Content', 'content');
     var size = new SelectElement('Size', 'size');
 
-    var radarImage = dom.image({
-        src: radarImageSrc(model.getValues())
+    function showImage() {
+        radarImage.show();
+
+        view.el.removeEventListener('transitionend', showImage);
+    }
+
+    var radarImage = new RadarImage(function (imgHeight, imgWidth) {
+        view.el.style.height = (imgHeight + 6) + 'px';
+        view.el.style.width = (imgWidth + 6) + 'px';
+
+        view.el.classList.remove('loading');
+
+        view.el.addEventListener('transitionend', showImage);
+    }, function () {
+        model.unsave();
+
+        view.el.classList.remove('image');
+        view.el.removeAttribute('style');
     });
 
-    view.el = dom.el('div', {
+    view.el = dom.el('form', {
         class: 'radar-box',
         children: [
             sites.el,
             types.el,
             contents.el,
             size.el,
-            radarImage
+            dom.button({
+                text: 'Hent bilde',
+                class: 'base-down js-editor'
+            }),
+            radarImage.image
         ]
     });
 
+    view.el.addEventListener('submit', function (evt) {
+        evt.preventDefault();
+
+        if (view.el.checkValidity()) {
+            model.save();
+
+            setImage();
+        }
+    });
+
+    function setImage() {
+        view.el.classList.add('loading');
+
+        radarImage.src(model.getValues());
+
+        view.el.classList.add('image');
+    }
+
     if (model.saved) {
+        setImage();
+
         sites.setOptions(model.getRadarsiteOptions(), model.getRadarSite());
         types.setOptions(model.getTypeOptions(), model.getType());
         contents.setOptions(model.getContentOptions(), model.getContent());
@@ -103,10 +122,6 @@ module.exports = function(model, available) {
 
         if (evt.target.name === 'size') {
             model.setSize(evt.target.value);
-
-            model.save();
-
-            radarImage.src = radarImageSrc(model.getValues());
         }
     });
 
