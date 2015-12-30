@@ -30,15 +30,29 @@ module.exports = function(model, available) {
         view.el.removeAttribute('style');
     });
 
-    view.el = dom.el('div', {
+    view.el = dom.el('form', {
         class: 'radar-box',
         children: [
             sites.el,
             types.el,
             contents.el,
             size.el,
+            dom.button({
+                text: 'Hent bilde',
+                class: 'base-down js-editor'
+            }),
             radarImage.image
         ]
+    });
+
+    view.el.addEventListener('submit', function (evt) {
+        evt.preventDefault();
+
+        if (view.el.checkValidity()) {
+            model.save();
+
+            setImage();
+        }
     });
 
     function setImage() {
@@ -108,10 +122,6 @@ module.exports = function(model, available) {
 
         if (evt.target.name === 'size') {
             model.setSize(evt.target.value);
-
-            model.save();
-
-            setImage();
         }
     });
 

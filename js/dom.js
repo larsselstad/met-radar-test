@@ -11,7 +11,7 @@ function el(tag, params) {
         domNode.id = params.id;
     }
 
-    if (params.value) {
+    if (params.value !== undefined) {
         domNode.value = params.value;
     }
 
@@ -49,7 +49,22 @@ module.exports = {
     select: function(params) {
         var select = el('select', params);
 
+        select.required = true;
+
         return select;
+    },
+    button: function(params) {
+        params.class = params.class ? 'btn ' + params.class : 'btn';
+
+        var btn = el('button', params);
+
+        if (params.type) {
+            btn.type = params.type;
+        } else {
+            btn.type = 'submit';
+        }
+
+        return btn;
     },
     image: function(params) {
         var img = new Image();

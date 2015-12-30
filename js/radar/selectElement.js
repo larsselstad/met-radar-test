@@ -22,7 +22,7 @@ function addStartOption(select) {
 
 function SelectElement(label, name) {
     this.el = dom.el('div', {
-        class: 'base-grid select-field',
+        class: 'base-down js-editor',
         children: [
             dom.el('label', {
                 for: name,
