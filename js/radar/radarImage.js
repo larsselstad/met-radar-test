@@ -22,7 +22,7 @@ function radarImageSrc(values) {
     return "http://api.met.no/weatherapi/radar/1.5/?" + parameters.join(';');
 }
 
-function RadarImage(onloadCb, clickCb) {
+function RadarImage(onloadCb, clickCb, errorCb) {
     this.image = dom.image({
         class: 'hide',
         onload: function() {
@@ -34,6 +34,12 @@ function RadarImage(onloadCb, clickCb) {
             clickCb();
         }.bind(this)
     });
+
+    this.image.onerror = function () {
+        errorCb();
+
+        window.alert('Noe gikk feil ved lasting av den værradaren');
+    };
 }
 
 RadarImage.prototype.show = function() {
