@@ -28,6 +28,12 @@ module.exports = function(model, available) {
 
         view.el.classList.remove('image');
         view.el.removeAttribute('style');
+    }, function () {
+        model.unsave();
+
+        view.el.classList.remove('loading');
+        view.el.classList.remove('image');
+        view.el.removeAttribute('style');
     });
 
     view.el = dom.el('form', {
