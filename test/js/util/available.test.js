@@ -1,8 +1,8 @@
 var test = require('tape');
 
-var Available = require('../../js/available');
+var Available = require('../../../js/available');
 
-var data = require('../data/available.data.json');
+var data = require('../../data/available.data.json');
 
 test('functions available in available', function (t) {
     var a = new Available({});
