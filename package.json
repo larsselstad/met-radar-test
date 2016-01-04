@@ -4,10 +4,12 @@
   "description": "Tester ut api.met.no sine værradar api",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/js/**/*.test.js",
+    "test": "npm run tape && npm run jshint",
     "build": "browserify js/main.js -d -t brfs -o js/build.js",
     "dev": "watchify js/main.js -d -t brfs -o js/build.js",
-    "budo": "budo js/main.js:js/build.js --live -- -t brfs"
+    "budo": "budo js/main.js:js/build.js --live -- -t brfs",
+    "jshint": "jshint js/**/*.js",
+    "tape": "tape test/js/**/*.test.js"
   },
   "author": "Lars Selstad",
   "license": "ISC",
@@ -15,6 +17,7 @@
     "brfs": "1.4.1",
     "browserify": "12.0.1",
     "budo": "6.1.0",
+    "jshint": "2.8.0",
     "lodash": "3.10.1",
     "tape": "4.4.0",
     "watchify": "3.6.1"

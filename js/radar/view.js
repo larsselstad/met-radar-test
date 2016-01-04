@@ -2,7 +2,9 @@ var dom = require('../dom');
 var SelectElement = require('./selectElement');
 var RadarImage = require('./radarImage');
 
-module.exports = function(model, available) {
+// TODO: funksjonen under er en tanke lang
+
+module.exports = function(model, available) { // jshint ignore:line
     var view = Object.create(null);
 
     var sites = new SelectElement('Site', 'radarsite');
