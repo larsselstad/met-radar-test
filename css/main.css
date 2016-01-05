@@ -19,6 +19,11 @@ body {
     transition: all 0.2s;
     height: 289px;
     width: 200px;
+    position: relative;
+}
+
+.radar-box img {
+    width: 100%;
 }
 
 .radar-box.image {
@@ -103,4 +108,20 @@ label {
 .btn:focus {
     background-color: #449d44;
     border-color: #255625;
+}
+
+.sizer-handle {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: grey;
+    cursor: nwse-resize;
+    background-color: red;
+    width: 30px;
+    height: 30px;
+    display: none;
+}
+
+.radar-box.image .sizer-handle {
+    display: block;
 }

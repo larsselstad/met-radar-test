@@ -5,7 +5,7 @@ var Model = require('../../../js/radar/model');
 test('model: constructor', function (t) {
     var m = new Model();
 
-    t.equal(m.saved, false);
+    t.equal(m.fromStorage, false);
 
     t.end();
 });
@@ -25,12 +25,18 @@ test('model: contructor params', function (t) {
         sizeOptions: [1,2,3]
     };
 
+    var dimensions = {
+        height: '200px',
+        width: '300px'
+    };
+
     var m = new Model({
         values: values,
-        options: options
+        options: options,
+        dimensions: dimensions
     });
 
-    t.equal(m.saved, true);
+    t.equal(m.fromStorage, true);
 
     t.equal(m.getRadarSite(), values.radarsite);
     t.equal(m.getType(), values.type);
@@ -41,6 +47,8 @@ test('model: contructor params', function (t) {
     t.equal(m.getRadarsiteOptions(), options.radarsiteOptions);
     t.equal(m.getTypeOptions(), options.typeOptions);
     t.equal(m.getContentOptions(), options.contentOptions);
+
+    t.equal(m.getDimensions(), dimensions);
 
     t.end();
 });

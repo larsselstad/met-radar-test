@@ -5,15 +5,20 @@ function Model(params) {
 
     this.values = {};
     this.options = {};
-    this.saved = false;
+    this.dimensions = {};
+    this.fromStorage = false;
 
     if (params.values) {
         this.values = params.values;
-        this.saved = true;
+        this.fromStorage = true;
     }
 
     if (params.options) {
         this.options = params.options;
+    }
+
+    if (params.dimensions) {
+        this.dimensions = params.dimensions;
     }
 }
 
@@ -85,11 +90,25 @@ Model.prototype.setSizeOptions = function(sizeOptions) {
     this.options.sizeOptions = sizeOptions;
 };
 
+Model.prototype.getDimensions = function() {
+    return this.dimensions;
+};
+
+Model.prototype.setDimensions = function(height, width) {
+    this.dimensions = {
+        height: height,
+        width: width
+    };
+};
+
 Model.prototype.save = function() {
     storage.save({
         values: this.values,
-        options: this.options
+        options: this.options,
+        dimensions: this.dimensions
     });
+
+    this.fromStorage = false;
 };
 
 Model.prototype.unsave = function() {
