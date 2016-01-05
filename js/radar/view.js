@@ -1,11 +1,13 @@
 var dom = require('../dom');
 var SelectElement = require('./selectElement');
 var RadarImage = require('./radarImage');
+var Sizer = require('./sizer');
 
 // TODO: funksjonen under er en tanke lang
 
 module.exports = function(model, available) { // jshint ignore:line
     var view = Object.create(null);
+    var sizer = new Sizer();
 
     var sites = new SelectElement('Site', 'radarsite');
     var types = new SelectElement('Type', 'type');
@@ -19,8 +21,15 @@ module.exports = function(model, available) { // jshint ignore:line
     }
 
     var radarImage = new RadarImage(function (imgHeight, imgWidth) {
-        view.el.style.height = (imgHeight + 6) + 'px';
-        view.el.style.width = (imgWidth + 6) + 'px';
+        if (model.fromStorage) {
+            view.el.style.height = model.getDimensions().height;
+            view.el.style.width = model.getDimensions().width;
+        } else {
+            view.el.style.height = (imgHeight + 6) + 'px';
+            view.el.style.width = (imgWidth + 6) + 'px';
+
+            model.setDimensions(view.el.style.height, view.el.style.width);
+        }
 
         view.el.classList.remove('loading');
 
@@ -49,7 +58,8 @@ module.exports = function(model, available) { // jshint ignore:line
                 text: 'Hent bilde',
                 class: 'base-down js-editor'
             }),
-            radarImage.image
+            radarImage.image,
+            sizer.handle
         ]
     });
 
@@ -63,6 +73,12 @@ module.exports = function(model, available) { // jshint ignore:line
         }
     });
 
+    sizer.init(view.el, function () {
+        model.setDimensions(view.el.style.height, view.el.style.width);
+
+        model.save();
+    });
+
     function setImage() {
         view.el.classList.add('loading');
 
@@ -71,7 +87,7 @@ module.exports = function(model, available) { // jshint ignore:line
         view.el.classList.add('image');
     }
 
-    if (model.saved) {
+    if (model.fromStorage) {
         setImage();
 
         sites.setOptions(model.getRadarsiteOptions(), model.getRadarSite());
