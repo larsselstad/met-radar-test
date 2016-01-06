@@ -120,6 +120,7 @@ label {
     width: 30px;
     height: 30px;
     display: none;
+    -webkit-clip-path: polygon(100% 0, 0% 100%, 100% 100%);
 }
 
 .radar-box.image .sizer-handle {
