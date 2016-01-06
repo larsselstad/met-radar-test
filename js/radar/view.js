@@ -20,7 +20,16 @@ module.exports = function(model, available) { // jshint ignore:line
         view.el.removeEventListener('transitionend', showImage);
     }
 
-    var radarImage = new RadarImage(function (imgHeight, imgWidth) {
+    function removeImage() {
+        model.unsave();
+
+        view.el.classList.remove('loading');
+        view.el.classList.remove('image');
+        view.el.removeAttribute('style');
+    }
+
+    var radarImage = new RadarImage(function(imgHeight, imgWidth) {
+        // TODO: Må løse det med en størrelse fra modelen bedre
         if (model.fromStorage) {
             view.el.style.height = model.getDimensions().height;
             view.el.style.width = model.getDimensions().width;
@@ -29,23 +38,18 @@ module.exports = function(model, available) { // jshint ignore:line
             view.el.style.width = (imgWidth + 6) + 'px';
 
             model.setDimensions(view.el.style.height, view.el.style.width);
+
+            // TODO: burde jeg flytte save-kallet til modelen på hver set-metode
+            model.save();
         }
 
         view.el.classList.remove('loading');
 
+        // TODO: burde jeg flytte dette til modelen på hver set-metode
+        model.fromStorage = false;
+
         view.el.addEventListener('transitionend', showImage);
-    }, function () {
-        model.unsave();
-
-        view.el.classList.remove('image');
-        view.el.removeAttribute('style');
-    }, function () {
-        model.unsave();
-
-        view.el.classList.remove('loading');
-        view.el.classList.remove('image');
-        view.el.removeAttribute('style');
-    });
+    }, removeImage, removeImage);
 
     view.el = dom.el('form', {
         class: 'radar-box',
@@ -63,7 +67,7 @@ module.exports = function(model, available) { // jshint ignore:line
         ]
     });
 
-    view.el.addEventListener('submit', function (evt) {
+    view.el.addEventListener('submit', function(evt) {
         evt.preventDefault();
 
         if (view.el.checkValidity()) {
@@ -73,7 +77,7 @@ module.exports = function(model, available) { // jshint ignore:line
         }
     });
 
-    sizer.init(view.el, function () {
+    sizer.init(view.el, function() {
         model.setDimensions(view.el.style.height, view.el.style.width);
 
         model.save();
