@@ -3,6 +3,15 @@ var SelectElement = require('./selectElement');
 var RadarImage = require('./radarImage');
 var Sizer = require('./sizer');
 
+function addPixel(number) {
+    return (number + 6) + 'px';
+}
+
+function setHeightAndWidth(el, height, width) {
+    el.style.height = height;
+    el.style.width = width;
+}
+
 // TODO: funksjonen under er en tanke lang
 
 module.exports = function(model, available) { // jshint ignore:line
@@ -23,33 +32,40 @@ module.exports = function(model, available) { // jshint ignore:line
     function removeImage() {
         model.unsave();
 
+        radarImage.hide();
+
         view.el.classList.remove('loading');
         view.el.classList.remove('image');
         view.el.removeAttribute('style');
     }
 
-    var radarImage = new RadarImage(function(imgHeight, imgWidth) {
-        // TODO: Må løse det med en størrelse fra modelen bedre
-        if (model.fromStorage) {
-            view.el.style.height = model.getDimensions().height;
-            view.el.style.width = model.getDimensions().width;
-        } else {
-            view.el.style.height = (imgHeight + 6) + 'px';
-            view.el.style.width = (imgWidth + 6) + 'px';
+    var radarImage = window.ri = new RadarImage(model.fromStorage, model.getValues());
 
-            model.setDimensions(view.el.style.height, view.el.style.width);
+    radarImage.on('radarimage:onload', function(imgHeight, imgWidth) {
+        setHeightAndWidth(view.el, addPixel(imgHeight), addPixel(imgWidth));
 
-            // TODO: burde jeg flytte save-kallet til modelen på hver set-metode
-            model.save();
-        }
+        model.setDimensions(view.el.style.height, view.el.style.width);
 
+        model.save();
+    });
+
+    radarImage.on('radarimage:onload-from-model', function () {
+        setHeightAndWidth(view.el, model.getDimensions().height, model.getDimensions().width);
+    });
+
+    radarImage.on('radarimage:loaded', function () {
         view.el.classList.remove('loading');
 
-        // TODO: burde jeg flytte dette til modelen på hver set-metode
-        model.fromStorage = false;
+        view.el.classList.add('image');
 
         view.el.addEventListener('transitionend', showImage);
-    }, removeImage, removeImage);
+    });
+
+    radarImage.on('radarimage:onerror', function () {
+        window.alert('Noe gikk feil ved lasting av en værradar');
+
+        removeImage();
+    });
 
     view.el = dom.el('form', {
         class: 'radar-box',
@@ -67,13 +83,21 @@ module.exports = function(model, available) { // jshint ignore:line
         ]
     });
 
+    view.el.addEventListener('click', function (evt) {
+        if (evt.target.tagName.toUpperCase() === 'IMG') {
+            removeImage();
+        }
+    });
+
     view.el.addEventListener('submit', function(evt) {
         evt.preventDefault();
 
         if (view.el.checkValidity()) {
+            view.el.classList.add('loading');
+
             model.save();
 
-            setImage();
+            radarImage.src(model.getValues());
         }
     });
 
@@ -83,16 +107,8 @@ module.exports = function(model, available) { // jshint ignore:line
         model.save();
     });
 
-    function setImage() {
-        view.el.classList.add('loading');
-
-        radarImage.src(model.getValues());
-
-        view.el.classList.add('image');
-    }
-
     if (model.fromStorage) {
-        setImage();
+        view.el.classList.add('loading');
 
         sites.setOptions(model.getRadarsiteOptions(), model.getRadarSite());
         types.setOptions(model.getTypeOptions(), model.getType());

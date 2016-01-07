@@ -23,18 +23,26 @@ function Model(params) {
 }
 
 Model.prototype.setRadarsite = function(radarsite) {
+    this.fromStorage = false;
+
     this.values.radarsite = radarsite;
 };
 
 Model.prototype.setType = function(type) {
+    this.fromStorage = false;
+
     this.values.type = type;
 };
 
 Model.prototype.setContent = function(content) {
+    this.fromStorage = false;
+
     this.values.content = content;
 };
 
 Model.prototype.setSize = function(size) {
+    this.fromStorage = false;
+
     this.values.size = size;
 };
 
@@ -95,6 +103,8 @@ Model.prototype.getDimensions = function() {
 };
 
 Model.prototype.setDimensions = function(height, width) {
+    this.fromStorage = false;
+
     this.dimensions = {
         height: height,
         width: width

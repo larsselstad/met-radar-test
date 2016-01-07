@@ -11,10 +11,6 @@ function el(tag, params) {
         domNode.id = params.id;
     }
 
-    if (params.value !== undefined) {
-        domNode.value = params.value;
-    }
-
     if (params.class) {
         domNode.className = params.class;
     }
@@ -48,6 +44,10 @@ module.exports = {
     option: option,
     select: function(params) {
         var select = el('select', params);
+
+        if (params.value !== undefined) {
+            select.value = params.value;
+        }
 
         select.required = true;
 
