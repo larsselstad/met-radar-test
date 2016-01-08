@@ -39,6 +39,10 @@ function option(value, text) {
     });
 }
 
+function remove(node) {
+    node.parentNode.removeChild(node);
+}
+
 module.exports = {
     el: el,
     option: option,
@@ -86,5 +90,6 @@ module.exports = {
         }
 
         return img;
-    }
+    },
+    remove: remove
 };

@@ -28,20 +28,35 @@ function refreshImage(image) {
     return function() {
         console.log('refreshImage: ' + new Date());
 
-        var storedSrc = image.src;
-        var storedOnload = image.onload;
+        // cache busting iframe hack to get the browser to refresh the image
+        var iframe = dom.el('iframe', {});
 
-        // overwriting onload to not trigger function from contructor
-        image.onload = function() {
-            // sets stored values back when dummy image is loaded to force
-            // a refresh of the radar image
-            image.onload = storedOnload;
+        iframe.style.display = 'none';
 
-            image.src = storedSrc;
+        // when the iframe has loaded, load the image again
+        iframe.onload = function () {
+            // iframe has done its job
+            dom.remove(iframe);
+
+            var storedSrc = image.src;
+            var storedOnload = image.onload;
+
+            // overwriting onload to not trigger function from contructor
+            image.onload = function() {
+                // sets stored values back when dummy image is loaded to force
+                // a refresh of the radar image
+                image.onload = storedOnload;
+
+                image.src = storedSrc;
+            };
+
+            // sets a new src to get the browser to load another image
+            image.src = '/img/loading-img.png';
         };
 
-        // sets a new src to get the browser to load another image
-        image.src = '/img/loading-img.png';
+        iframe.src = image.src;
+
+        document.querySelector('body').appendChild(iframe);
     };
 }
 
@@ -101,7 +116,6 @@ RadarImage.prototype.src = function(values) {
 RadarImage.prototype.startRefresh = function() {
     clearTimeout(this.timeoutId);
 
-    // 600000 ms = 10 m
     // 450000 ms = 7,5 m
     // the radars seem to update every 7,5 minutes
     this.timeoutId = setTimeout(refreshImage(this.image), 450000);

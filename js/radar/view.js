@@ -64,6 +64,8 @@ module.exports = function(model, available) { // jshint ignore:line
     radarImage.on('radarimage:onerror', function () {
         window.alert('Noe gikk feil ved lasting av en værradar');
 
+        radarImage.hide();
+
         removeImage();
     });
 
