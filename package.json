@@ -7,7 +7,7 @@
     "test": "npm run tape && npm run jshint",
     "build": "browserify js/main.js -d -t brfs -o js/build.js",
     "dev": "watchify js/main.js -d -t brfs -o js/build.js",
-    "budo": "budo js/main.js:js/build.js --live -- -t brfs",
+    "budo": "budo js/main.js:js/build.js -- -t brfs",
     "jshint": "jshint js/**/*.js",
     "tape": "tape test/js/**/*.test.js"
   },
