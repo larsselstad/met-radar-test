@@ -1,9 +1,9 @@
 var dom = require('../../dom');
 var SelectElement = require('./selectElement');
 
-function setOptions(select, params) {
-    if (params) {
-        select.setOptions(params.options, params.selected);
+function setOptions(select, options, selected) {
+    if (options) {
+        select.setOptions(options, selected);
     } else {
         select.setOptions();
     }
@@ -86,11 +86,11 @@ Form.prototype.setSize = function setSize(options) {
     this.size.setOptions(options);
 };
 
-Form.prototype.setOptions = function(params) {
-    setOptions(this.sites, params.sites);
-    setOptions(this.types, params.types);
-    setOptions(this.contents, params.contents);
-    setOptions(this.size, params.size);
+Form.prototype.setOptions = function() {
+    setOptions(this.sites, this.model.getRadarsiteOptions(), this.model.getRadarSite());
+    setOptions(this.types, this.model.getTypeOptions(), this.model.getType());
+    setOptions(this.contents, this.model.getContentOptions(), this.model.getContent());
+    setOptions(this.size, this.model.getSizeOptions(), this.model.getSize());
 };
 
 module.exports = Form;

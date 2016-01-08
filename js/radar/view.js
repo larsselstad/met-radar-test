@@ -15,7 +15,7 @@ function setHeightAndWidth(el, height, width) {
 // TODO: funksjonen under er en tanke lang
 
 module.exports = function(model, available) { // jshint ignore:line
-    var form = new Form(model, available, function () {
+    var form = new Form(model, available, function() {
         radarImage.src(model.getValues());
         view.classList.add('loading');
     });
@@ -46,11 +46,11 @@ module.exports = function(model, available) { // jshint ignore:line
         model.save();
     });
 
-    radarImage.on('radarimage:onload-from-model', function () {
+    radarImage.on('radarimage:onload-from-model', function() {
         setHeightAndWidth(view, model.getDimensions().height, model.getDimensions().width);
     });
 
-    radarImage.on('radarimage:loaded', function () {
+    radarImage.on('radarimage:loaded', function() {
         view.classList.remove('loading');
 
         view.classList.add('image');
@@ -58,7 +58,7 @@ module.exports = function(model, available) { // jshint ignore:line
         view.addEventListener('transitionend', showImage);
     });
 
-    radarImage.on('radarimage:onerror', function () {
+    radarImage.on('radarimage:onerror', function() {
         window.alert('Noe gikk feil ved lasting av en værradar');
 
         radarImage.hide();
@@ -67,7 +67,7 @@ module.exports = function(model, available) { // jshint ignore:line
     });
 
     var view = dom.el('div', {
-        class: 'radar-box',
+        class: 'radar-box loading',
         children: [
             form.el,
             radarImage.el,
@@ -75,7 +75,7 @@ module.exports = function(model, available) { // jshint ignore:line
         ]
     });
 
-    view.addEventListener('click', function (evt) {
+    view.addEventListener('click', function(evt) {
         if (evt.target.tagName.toUpperCase() === 'IMG') {
             removeImage();
         }
@@ -87,38 +87,12 @@ module.exports = function(model, available) { // jshint ignore:line
         model.save();
     });
 
-    if (model.fromStorage) {
-        view.classList.add('loading');
-
-        form.setOptions({
-            sites: {
-                options: model.getRadarsiteOptions(),
-                selected: model.getRadarSite()
-            },
-            types: {
-                options: model.getTypeOptions(),
-                selected: model.getType()
-            },
-            contents: {
-                options: model.getContentOptions(),
-                selected: model.getContent()
-            },
-            size: {
-                options: model.getSizeOptions(),
-                selected: model.getSize()
-            }
-        });
-    } else {
-        var radarsites = available.getRadarSites();
-
-        model.setRadarsiteOptions(radarsites);
-
-        form.setOptions({
-            sites: {
-                options: radarsites
-            }
-        });
+    if (!model.fromStorage) {
+        view.classList.remove('loading');
+        model.setRadarsiteOptions(available.getRadarSites());
     }
+
+    form.setOptions();
 
     return view;
 };
