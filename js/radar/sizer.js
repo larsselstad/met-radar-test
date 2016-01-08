@@ -7,7 +7,7 @@ function getInt(str) {
 }
 
 function Sizer() {
-    this.handle = dom.el('div', {
+    this.el = dom.el('div', {
         class: 'sizer-handle'
     });
 }
@@ -18,7 +18,7 @@ Sizer.prototype.init = function (element, changeCb) {
     var ratio = 1;
     var onMousemove;
 
-    this.handle.addEventListener('mousedown', function(evt) {
+    this.el.addEventListener('mousedown', function(evt) {
         startX = evt.clientX;
         startWidth = getInt(element.style.width);
         ratio = startWidth / getInt(element.style.height);

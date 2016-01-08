@@ -49,7 +49,7 @@ body {
     }
 }
 
-.radar-box.image .js-editor {
+.radar-box.image form {
     display: none;
 }
 
