@@ -24,9 +24,10 @@ function radarImageSrc(values) {
     return "http://api.met.no/weatherapi/radar/1.5/?" + parameters.join(';');
 }
 
-function refreshImage(image) {
+function refreshImage(image, that) {
     return function() {
         console.log('refreshImage: ' + new Date());
+        that.emit('radarimage:refresh');
 
         // cache busting iframe hack to get the browser to refresh the image
         var iframe = dom.el('iframe', {});
@@ -63,7 +64,7 @@ function refreshImage(image) {
 function RadarImage(fetchedFromModel, values) {
     EventEmitter.call(this);
 
-    this.image = dom.image({
+    this.el = dom.image({
         class: 'hide',
         // onload is triggered when images is done loading
         onload: function() {
@@ -73,7 +74,7 @@ function RadarImage(fetchedFromModel, values) {
 
                 fetchedFromModel = false;
             } else {
-                this.emit('radarimage:onload', this.image.height, this.image.width);
+                this.emit('radarimage:onload', this.el.height, this.el.width);
             }
 
             this.emit('radarimage:loaded');
@@ -88,7 +89,7 @@ function RadarImage(fetchedFromModel, values) {
 
     // onerror is triggered when there is an error
     // the browser do not provid any meaningful parameters :-(
-    this.image.onerror = function() {
+    this.el.onerror = function() {
         this.emit('radarimage:onerror');
     }.bind(this);
 
@@ -99,18 +100,18 @@ function RadarImage(fetchedFromModel, values) {
 inherits(RadarImage, EventEmitter);
 
 RadarImage.prototype.show = function() {
-    this.image.classList.remove('hide');
+    this.el.classList.remove('hide');
 };
 
 RadarImage.prototype.hide = function() {
-    this.image.classList.add('hide');
+    this.el.classList.add('hide');
 
     // no need to refresh when image is hidden
     clearTimeout(this.timeoutId);
 };
 
 RadarImage.prototype.src = function(values) {
-    this.image.src = radarImageSrc(values);
+    this.el.src = radarImageSrc(values);
 };
 
 RadarImage.prototype.startRefresh = function() {
@@ -118,11 +119,11 @@ RadarImage.prototype.startRefresh = function() {
 
     // 450000 ms = 7,5 m
     // the radars seem to update every 7,5 minutes
-    this.timeoutId = setTimeout(refreshImage(this.image), 450000);
+    this.timeoutId = setTimeout(refreshImage(this.el, this), 450000);
 };
 
 RadarImage.prototype.refresh = function() {
-    refreshImage(this.image)();
+    refreshImage(this.el, this)();
 
     this.startRefresh();
 };

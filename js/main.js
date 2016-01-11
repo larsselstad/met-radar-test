@@ -23,5 +23,5 @@ parseString(xml, function(err, result) {
 
     var rv = radarView(model, available);
 
-    document.querySelector('body').appendChild(rv.el);
+    document.querySelector('#app').appendChild(rv);
 });

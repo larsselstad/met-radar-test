@@ -1,12 +1,16 @@
 * {
     box-sizing: border-box;
     margin: 0;
-	padding: 0;
+    padding: 0;
 }
 
 body {
     font-size: 16px;
     font-family: sans-serif;
+}
+
+#app {
+    position: relative;
 }
 
 .base-down {
@@ -19,11 +23,14 @@ body {
     transition: all 0.2s;
     height: 289px;
     width: 200px;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .radar-box img {
     width: 100%;
+    cursor: all-scroll;
 }
 
 .radar-box.image {
@@ -34,41 +41,32 @@ body {
 .radar-box.loading {
     animation: background-blink 1.3s infinite;
 }
-
 @keyframes background-blink {
     0 {
         background-color: inherit;
     }
-
     50% {
         background-color: #aaa;
     }
-
     100% {
         background-color: inherit;
     }
 }
-
-.radar-box.image .js-editor {
+.radar-box.image form {
     display: none;
 }
-
 label {
     display: block;
 }
-
 .select {
     transition: all 0.2s;
 }
-
 .select:focus {
     transform: scale(1.1);
 }
-
 .hide {
     display: none;
 }
-
 .btn {
     display: inline-block;
     padding: 6px 12px;
@@ -97,7 +95,7 @@ label {
 .btn:active {
     background-image: none;
     outline: 0;
-    box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
 }
 
 .btn:hover, .btn:active {
@@ -125,4 +123,31 @@ label {
 
 .radar-box.image .sizer-handle {
     display: block;
+}
+
+.statusbar {
+    position: absolute;
+    bottom: -60px;
+    border-style: solid;
+    border-width: 0 3px 3px;
+    padding: 10px;
+    left: -3px;
+    right: -3px;
+    display: none;
+    border-radius: 0 0 5px 5px;
+    background-color: #fff;
+}
+
+.radar-box.image .statusbar {
+    display: block;
+}
+
+.statusbar-place {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.statusbar-time {
+    display: inline-block;
+    margin: 0 15px 0 25px;
 }
