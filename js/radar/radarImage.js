@@ -35,7 +35,7 @@ function refreshImage(image, that) {
         iframe.style.display = 'none';
 
         // when the iframe has loaded, load the image again
-        iframe.onload = function () {
+        iframe.onload = function() {
             // iframe has done its job
             dom.remove(iframe);
 
@@ -111,7 +111,13 @@ RadarImage.prototype.hide = function() {
 };
 
 RadarImage.prototype.src = function(values) {
-    this.el.src = radarImageSrc(values);
+    var src = radarImageSrc(values);
+
+    if (src) {
+        this.emit('radarimage:loading');
+
+        this.el.src = src;
+    }
 };
 
 RadarImage.prototype.startRefresh = function() {

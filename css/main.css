@@ -128,7 +128,7 @@ label {
 
 .statusbar {
     position: absolute;
-    bottom: -60px;
+    top: 100%;
     border-style: solid;
     border-width: 0 3px 3px;
     padding: 10px;
@@ -151,4 +151,17 @@ label {
 .statusbar-time {
     display: inline-block;
     margin: 0 15px 0 25px;
+}
+
+.radar-add-btn {
+    position: absolute;
+    z-index: 100;
+    right: 20px;
+    border-radius: 50%;
+    line-height: 0;
+    height: 50px;
+    font-size: 31px;
+    width: 50px;
+    text-align: center;
+    font-weight: bold;
 }

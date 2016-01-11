@@ -42,6 +42,10 @@ module.exports = function(model, available) { // jshint ignore:line
         setHeightAndWidth(view, '', '');
     }
 
+    radarImage.on('radarimage:loading', function () {
+        view.classList.add('loading');
+    });
+
     radarImage.on('radarimage:onload', function(imgHeight, imgWidth) {
         setHeightAndWidth(view, addPixel(imgHeight), addPixel(imgWidth));
 
@@ -71,7 +75,7 @@ module.exports = function(model, available) { // jshint ignore:line
     radarImage.on('radarimage:refresh', statusbar.setRefreshTime.bind(statusbar));
 
     var view = dom.el('div', {
-        class: 'radar-box loading',
+        class: 'radar-box',
         children: [
             form.el,
             radarImage.el,

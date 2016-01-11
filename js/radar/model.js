@@ -3,28 +3,13 @@ var storage = require('../storage');
 function Model(params) {
     params = params || {};
 
-    this.values = {};
-    this.options = {};
-    this.dimensions = {};
-    this.positions = {};
-    this.fromStorage = false;
+    this.fromStorage = params.id !== undefined ? true : false;
 
-    if (params.values) {
-        this.values = params.values;
-        this.fromStorage = true;
-    }
-
-    if (params.options) {
-        this.options = params.options;
-    }
-
-    if (params.dimensions) {
-        this.dimensions = params.dimensions;
-    }
-
-    if (params.positions) {
-        this.positions = params.positions;
-    }
+    this.id = params.id !== undefined ? params.id : '';
+    this.values = params.values || {};
+    this.options = params.options || {};
+    this.dimensions = params.dimensions || {};
+    this.positions = params.positions || {};
 }
 
 Model.prototype.setRadarsite = function(radarsite) {
@@ -103,6 +88,10 @@ Model.prototype.setSizeOptions = function(sizeOptions) {
     this.options.sizeOptions = sizeOptions;
 };
 
+Model.prototype.setId = function(newId) {
+    this.id = newId;
+};
+
 Model.prototype.getDimensions = function() {
     return this.dimensions;
 };
@@ -130,18 +119,21 @@ Model.prototype.setPositions = function(left, top) {
 };
 
 Model.prototype.save = function() {
-    storage.save({
+    var id = storage.save({
         values: this.values,
         options: this.options,
         dimensions: this.dimensions,
-        positions: this.positions
+        positions: this.positions,
+        id: this.id
     });
+
+    this.setId(id);
 
     this.fromStorage = false;
 };
 
 Model.prototype.unsave = function() {
-    storage.unsave();
+    storage.remove(this.id);
 };
 
 module.exports = Model;
