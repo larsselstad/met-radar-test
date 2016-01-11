@@ -39,7 +39,7 @@ module.exports = function(model, available) { // jshint ignore:line
 
         view.classList.remove('loading');
         view.classList.remove('image');
-        view.removeAttribute('style');
+        setHeightAndWidth(view, '', '');
     }
 
     radarImage.on('radarimage:onload', function(imgHeight, imgWidth) {
