@@ -3,6 +3,7 @@ var Form = require('./choose/form');
 var RadarImage = require('./radarImage');
 var Sizer = require('./sizer');
 var mover = require('./mover');
+var Statusbar = require('./statusbar');
 
 function addPixel(number) {
     return (number + 6) + 'px';
@@ -19,9 +20,11 @@ module.exports = function(model, available) { // jshint ignore:line
     var form = new Form(model, available, function() {
         radarImage.src(model.getValues());
         view.classList.add('loading');
+        statusbar.setPlace(model.getRadarSite());
     });
     var radarImage = new RadarImage(model.fromStorage, model.getValues());
     var sizer = new Sizer();
+    var statusbar = new Statusbar(removeImage, radarImage.refresh.bind(radarImage), model.getRadarSite());
 
     function showImage() {
         radarImage.show();
@@ -62,27 +65,22 @@ module.exports = function(model, available) { // jshint ignore:line
     radarImage.on('radarimage:onerror', function() {
         window.alert('Noe gikk feil ved lasting av en værradar');
 
-        radarImage.hide();
-
         removeImage();
     });
+
+    radarImage.on('radarimage:refresh', statusbar.setRefreshTime.bind(statusbar));
 
     var view = dom.el('div', {
         class: 'radar-box loading',
         children: [
             form.el,
             radarImage.el,
-            sizer.el
+            sizer.el,
+            statusbar.el
         ]
     });
 
-    // view.addEventListener('click', function(evt) {
-    //     if (evt.target.tagName.toUpperCase() === 'IMG') {
-    //         removeImage();
-    //     }
-    // });
-
-    mover(view, function () {
+    mover(view, function() {
         model.setPositions(view.style.left, view.style.top);
 
         model.save();

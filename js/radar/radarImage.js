@@ -24,9 +24,10 @@ function radarImageSrc(values) {
     return "http://api.met.no/weatherapi/radar/1.5/?" + parameters.join(';');
 }
 
-function refreshImage(image) {
+function refreshImage(image, that) {
     return function() {
         console.log('refreshImage: ' + new Date());
+        that.emit('radarimage:refresh');
 
         // cache busting iframe hack to get the browser to refresh the image
         var iframe = dom.el('iframe', {});
@@ -118,11 +119,11 @@ RadarImage.prototype.startRefresh = function() {
 
     // 450000 ms = 7,5 m
     // the radars seem to update every 7,5 minutes
-    this.timeoutId = setTimeout(refreshImage(this.el), 450000);
+    this.timeoutId = setTimeout(refreshImage(this.el, this), 450000);
 };
 
 RadarImage.prototype.refresh = function() {
-    refreshImage(this.el)();
+    refreshImage(this.el, this)();
 
     this.startRefresh();
 };
