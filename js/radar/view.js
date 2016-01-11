@@ -2,6 +2,7 @@ var dom = require('../dom');
 var Form = require('./choose/form');
 var RadarImage = require('./radarImage');
 var Sizer = require('./sizer');
+var mover = require('./mover');
 
 function addPixel(number) {
     return (number + 6) + 'px';
@@ -75,10 +76,16 @@ module.exports = function(model, available) { // jshint ignore:line
         ]
     });
 
-    view.addEventListener('click', function(evt) {
-        if (evt.target.tagName.toUpperCase() === 'IMG') {
-            removeImage();
-        }
+    // view.addEventListener('click', function(evt) {
+    //     if (evt.target.tagName.toUpperCase() === 'IMG') {
+    //         removeImage();
+    //     }
+    // });
+
+    mover(view, function () {
+        model.setPositions(view.style.left, view.style.top);
+
+        model.save();
     });
 
     sizer.init(view, function() {
@@ -90,6 +97,11 @@ module.exports = function(model, available) { // jshint ignore:line
     if (!model.fromStorage) {
         view.classList.remove('loading');
         model.setRadarsiteOptions(available.getRadarSites());
+    } else {
+        var positions = model.getPositions();
+
+        view.style.left = positions.left || 0;
+        view.style.top = positions.top || 0;
     }
 
     form.setOptions();

@@ -73,6 +73,8 @@ module.exports = {
     image: function(params) {
         var img = new Image();
 
+        img.draggable = false;
+
         if (params.onload) {
             img.onload = params.onload;
         }

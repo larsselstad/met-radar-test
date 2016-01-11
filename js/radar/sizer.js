@@ -19,11 +19,15 @@ Sizer.prototype.init = function (element, changeCb) {
     var onMousemove;
 
     this.el.addEventListener('mousedown', function(evt) {
+        evt.stopPropagation();
+
         startX = evt.clientX;
         startWidth = getInt(element.style.width);
         ratio = startWidth / getInt(element.style.height);
 
         document.addEventListener('mousemove', onMousemove = _.throttle(function mousemove(evt) {
+            evt.stopPropagation();
+
             var newWidth = startWidth + (evt.clientX - startX);
 
             element.style.width = newWidth + 'px';
@@ -33,7 +37,9 @@ Sizer.prototype.init = function (element, changeCb) {
         document.addEventListener('mouseup', cancel);
     });
 
-    function cancel() {
+    function cancel(evt) {
+        evt.stopPropagation();
+        
         document.removeEventListener('mousemove', onMousemove);
         document.removeEventListener('mouseup', cancel);
 

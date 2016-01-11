@@ -6,6 +6,7 @@ function Model(params) {
     this.values = {};
     this.options = {};
     this.dimensions = {};
+    this.positions = {};
     this.fromStorage = false;
 
     if (params.values) {
@@ -19,6 +20,10 @@ function Model(params) {
 
     if (params.dimensions) {
         this.dimensions = params.dimensions;
+    }
+
+    if (params.positions) {
+        this.positions = params.positions;
     }
 }
 
@@ -111,11 +116,25 @@ Model.prototype.setDimensions = function(height, width) {
     };
 };
 
+Model.prototype.getPositions = function() {
+    return this.positions;
+};
+
+Model.prototype.setPositions = function(left, top) {
+    this.fromStorage = false;
+
+    this.positions = {
+        left: left,
+        top: top
+    };
+};
+
 Model.prototype.save = function() {
     storage.save({
         values: this.values,
         options: this.options,
-        dimensions: this.dimensions
+        dimensions: this.dimensions,
+        positions: this.positions
     });
 
     this.fromStorage = false;
