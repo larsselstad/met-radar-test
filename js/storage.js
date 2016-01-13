@@ -18,7 +18,11 @@ function findIndexOf(id) {
 function replaceModel(model) {
     var index = findIndexOf(model.id);
 
-    models[index] = model;
+    if (index !== undefined) {
+        models[index] = model;
+    } else {
+        models.push(model);
+    }
 }
 
 function findHighestId() {

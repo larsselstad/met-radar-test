@@ -35,6 +35,10 @@ function SelectElement(label, name) {
             })
         ]
     });
+
+    this.el.addEventListener('mousedown', function (evt) {
+        evt.stopPropagation();
+    });
 }
 
 SelectElement.prototype.setOptions = function(options, selected) {
