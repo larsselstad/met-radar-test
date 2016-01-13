@@ -125,7 +125,7 @@ Model.prototype.save = function() {
         dimensions: this.dimensions,
         positions: this.positions,
         id: this.id
-    });
+    }, window.localStorage);
 
     this.setId(id);
 
@@ -133,7 +133,7 @@ Model.prototype.save = function() {
 };
 
 Model.prototype.unsave = function() {
-    storage.remove(this.id);
+    storage.remove(this.id, window.localStorage);
 };
 
 module.exports = Model;

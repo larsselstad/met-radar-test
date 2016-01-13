@@ -21,7 +21,7 @@ parseString(xml, function(err, result) {
 
     var available = new Available(queries);
 
-    var storedValues = storage.get();
+    var storedValues = storage.get(window.localStorage);
 
     if (storedValues.length === 0) {
         addRadar(available);

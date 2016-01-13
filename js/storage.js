@@ -34,7 +34,7 @@ function findHighestId() {
 }
 
 module.exports = {
-    save: function(model) {
+    save: function(model, localStorage) {
         if (model.id === undefined || model.id === '') {
             model.id = lastId;
 
@@ -49,7 +49,7 @@ module.exports = {
 
         return model.id;
     },
-    remove: function(id) {
+    remove: function(id, localStorage) {
         if (id !== undefined) {
             var index = findIndexOf(id);
 
@@ -58,7 +58,7 @@ module.exports = {
             localStorage.setItem(KEY, JSON.stringify(models));
         }
     },
-    get: function() {
+    get: function(localStorage) {
         var values = localStorage.getItem(KEY);
 
         if (values) {
