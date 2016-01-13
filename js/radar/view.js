@@ -21,6 +21,7 @@ module.exports = function(model, available) { // jshint ignore:line
         radarImage.src(model.getValues());
         view.classList.add('loading');
         statusbar.setPlace(model.getRadarSite());
+        statusbar.setRefreshTime();
     });
     var radarImage = new RadarImage(model.fromStorage, model.getValues());
     var sizer = new Sizer();
