@@ -17,6 +17,10 @@ body {
     margin-bottom: 20px;
 }
 
+.base-grid {
+    padding: 0 10px 10px;
+}
+
 .radar-box {
     border: 3px solid #ccc;
     padding: 10px;
@@ -26,6 +30,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    background-color: #fff;
 }
 
 .radar-box img {
@@ -108,6 +113,21 @@ label {
     border-color: #255625;
 }
 
+.btn-red {
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+.btn-red:hover, .btn-red:active {
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.btn-red:focus {
+    background-color: #c9302c;
+    border-color: #761c19;
+}
+
 .sizer-handle {
     position: absolute;
     right: 0;
@@ -127,19 +147,19 @@ label {
 
 .statusbar {
     position: absolute;
-    bottom: -60px;
+    top: 100%;
     border-style: solid;
     border-width: 0 3px 3px;
-    padding: 10px;
     left: -3px;
     right: -3px;
     display: none;
-    border-radius: 0 0 5px 5px;
     background-color: #fff;
+    padding-top: 10px;
 }
 
 .radar-box.image .statusbar {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .statusbar-place {
@@ -149,5 +169,24 @@ label {
 
 .statusbar-time {
     display: inline-block;
-    margin: 0 15px 0 25px;
+    margin: 0 15px 0 0;
+}
+
+.radar-add-btn {
+    position: fixed;
+    z-index: 100;
+    right: 20px;
+    border-radius: 50%;
+    line-height: 0;
+    height: 50px;
+    font-size: 31px;
+    width: 50px;
+    text-align: center;
+    font-weight: bold;
+    bottom: 20px;
+}
+
+.radar-add-btn > span {
+    position: relative;
+    top: -2px;
 }

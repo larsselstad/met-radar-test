@@ -33,7 +33,8 @@ test('model: contructor params', function (t) {
     var m = new Model({
         values: values,
         options: options,
-        dimensions: dimensions
+        dimensions: dimensions,
+        id: 'id'
     });
 
     t.equal(m.fromStorage, true);
