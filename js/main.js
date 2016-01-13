@@ -32,9 +32,13 @@ parseString(xml, function(err, result) {
     }
 
     var addRadarBtn = dom.button({
-        text: '+',
         class: 'radar-add-btn',
-        type: 'button'
+        type: 'button',
+        children: [
+            dom.el('span', {
+                text: '+'
+            })
+        ]
     });
 
     addRadarBtn.addEventListener('click', function(evt) {

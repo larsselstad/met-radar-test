@@ -154,7 +154,7 @@ label {
 }
 
 .radar-add-btn {
-    position: absolute;
+    position: fixed;
     z-index: 100;
     right: 20px;
     border-radius: 50%;
@@ -164,4 +164,10 @@ label {
     width: 50px;
     text-align: center;
     font-weight: bold;
+    bottom: 20px;
+}
+
+.radar-add-btn > span {
+    position: relative;
+    top: -2px;
 }
