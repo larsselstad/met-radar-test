@@ -1,3 +1,5 @@
+var inherits = require('util').inherits;
+var EventEmitter = require('events').EventEmitter;
 var dom = require('../dom');
 
 function padding(number) {
@@ -14,7 +16,16 @@ function printNow() {
     return [padding(d.getHours()), padding(d.getMinutes()), padding(d.getSeconds())].join(':');
 }
 
-function Statusbar(changeRadarCb, refreshCb, place) {
+function div(children) {
+    return dom.el('div', {
+        class: 'base-grid',
+        children: children
+    });
+}
+
+function Statusbar(place) {
+    EventEmitter.call(this);
+
     this.place = dom.el('p', {
         class: 'statusbar-place',
         text: place || ''
@@ -28,8 +39,8 @@ function Statusbar(changeRadarCb, refreshCb, place) {
     changeBtn.addEventListener('click', function(evt) {
         evt.preventDefault();
 
-        changeRadarCb();
-    });
+        this.emit('statusbar:change');
+    }.bind(this));
 
     this.refreshTime = dom.el('p', {
         class: 'statusbar-time',
@@ -44,21 +55,41 @@ function Statusbar(changeRadarCb, refreshCb, place) {
     refreshBtn.addEventListener('click', function(evt) {
         evt.preventDefault();
 
-        refreshCb();
+        this.emit('statusbar:refresh');
 
         this.setRefreshTime();
+    }.bind(this));
+
+    var removeBtn = dom.button({
+        type: 'button',
+        text: 'Fjern',
+        class: 'btn-red'
+    });
+
+    removeBtn.addEventListener('click', function(evt) {
+        evt.preventDefault();
+
+        this.emit('statusbar:remove');
     }.bind(this));
 
     this.el = dom.el('div', {
         class: 'statusbar',
         children: [
-            this.place,
-            changeBtn,
-            this.refreshTime,
-            refreshBtn
+            div([
+                this.place,
+                changeBtn
+            ]),
+            div([
+                this.refreshTime,
+                refreshBtn
+            ]),
+            div([removeBtn])
         ]
     });
 }
+
+// at EventEmitter function to prototype (I guess)
+inherits(Statusbar, EventEmitter);
 
 Statusbar.prototype.setPlace = function(text) {
     this.place.textContent = text;

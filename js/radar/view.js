@@ -25,7 +25,17 @@ module.exports = function(model, available) { // jshint ignore:line
     });
     var radarImage = new RadarImage(model.fromStorage, model.getValues());
     var sizer = new Sizer();
-    var statusbar = new Statusbar(removeImage, radarImage.refresh.bind(radarImage), model.getRadarSite());
+    var statusbar = new Statusbar(model.getRadarSite());
+
+    statusbar.on('statusbar:change', removeImage);
+
+    statusbar.on('statusbar:refresh', radarImage.refresh.bind(radarImage));
+
+    statusbar.on('statusbar:remove', function() {
+        radarImage.stopRefresh();
+        dom.remove(view);
+        model.unsave();
+    });
 
     function showImage() {
         radarImage.show();

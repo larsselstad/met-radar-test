@@ -134,4 +134,8 @@ RadarImage.prototype.refresh = function() {
     this.startRefresh();
 };
 
+RadarImage.prototype.stopRefresh = function() {
+    clearTimeout(this.timeoutId);
+};
+
 module.exports = RadarImage;
