@@ -6,7 +6,11 @@ var radarView = require('./radar/view.js');
 var Model = require('./radar/model.js');
 var storage = require('./storage');
 
-var xml = fs.readFileSync('a.xml', {encoding: 'utf8'});
+var app = document.querySelector('#app');
+
+var xml = fs.readFileSync('a.xml', {
+    encoding: 'utf8'
+});
 
 parseString(xml, function(err, result) {
     if (err) {
@@ -17,11 +21,39 @@ parseString(xml, function(err, result) {
 
     var available = new Available(queries);
 
-    var storedValues = storage.get();
+    var storedValues = storage.get(window.localStorage);
 
-    var model = new Model(storedValues);
+    if (storedValues.length === 0) {
+        addRadar(available);
+    } else {
+        storedValues.forEach(function(value) {
+            addRadar(available, value);
+        });
+    }
+
+    var addRadarBtn = dom.button({
+        class: 'radar-add-btn',
+        type: 'button',
+        children: [
+            dom.el('span', {
+                text: '+'
+            })
+        ]
+    });
+
+    addRadarBtn.addEventListener('click', function(evt) {
+        evt.preventDefault();
+
+        addRadar(available);
+    });
+
+    app.appendChild(addRadarBtn);
+});
+
+function addRadar(available, values) {
+    var model = new Model(values);
 
     var rv = radarView(model, available);
 
-    document.querySelector('#app').appendChild(rv);
-});
+    app.appendChild(rv);
+}

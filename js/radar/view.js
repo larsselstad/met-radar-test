@@ -21,10 +21,21 @@ module.exports = function(model, available) { // jshint ignore:line
         radarImage.src(model.getValues());
         view.classList.add('loading');
         statusbar.setPlace(model.getRadarSite());
+        statusbar.setRefreshTime();
     });
     var radarImage = new RadarImage(model.fromStorage, model.getValues());
     var sizer = new Sizer();
-    var statusbar = new Statusbar(removeImage, radarImage.refresh.bind(radarImage), model.getRadarSite());
+    var statusbar = new Statusbar(model.getRadarSite());
+
+    statusbar.on('statusbar:change', removeImage);
+
+    statusbar.on('statusbar:refresh', radarImage.refresh.bind(radarImage));
+
+    statusbar.on('statusbar:remove', function() {
+        radarImage.stopRefresh();
+        dom.remove(view);
+        model.unsave();
+    });
 
     function showImage() {
         radarImage.show();
@@ -39,8 +50,12 @@ module.exports = function(model, available) { // jshint ignore:line
 
         view.classList.remove('loading');
         view.classList.remove('image');
-        view.removeAttribute('style');
+        setHeightAndWidth(view, '', '');
     }
+
+    radarImage.on('radarimage:loading', function () {
+        view.classList.add('loading');
+    });
 
     radarImage.on('radarimage:onload', function(imgHeight, imgWidth) {
         setHeightAndWidth(view, addPixel(imgHeight), addPixel(imgWidth));
@@ -71,7 +86,7 @@ module.exports = function(model, available) { // jshint ignore:line
     radarImage.on('radarimage:refresh', statusbar.setRefreshTime.bind(statusbar));
 
     var view = dom.el('div', {
-        class: 'radar-box loading',
+        class: 'radar-box',
         children: [
             form.el,
             radarImage.el,
