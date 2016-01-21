@@ -132,13 +132,12 @@ label {
     position: absolute;
     right: 0;
     bottom: 0;
-    background-color: grey;
     cursor: nwse-resize;
-    background-color: red;
     width: 30px;
     height: 30px;
     display: none;
-    -webkit-clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+    background-image: url(../img/sizer-handle.svg);
+    background-repeat: no-repeat;
 }
 
 .radar-box.image .sizer-handle {
