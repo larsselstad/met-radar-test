@@ -1,5 +1,11 @@
 #!/bin/bash
-if [ "$TRAVIS_BRANCH" == "dev" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+echo "Running deploy script"
+
+echo "On branch: ${TRAVIS_BRANCH}"
+
+echo "Is PR: ${TRAVIS_PULL_REQUEST}"
+
+if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
   echo "Deploying to beta server"
   chmod 600 deploy_key
   mv deploy_key ~/.ssh/id_rsa
