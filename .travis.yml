@@ -1,3 +1,13 @@
 language: node_js
 node_js:
-  - "4.1.1"
+- 4.1.1
+branches:
+  only: dev
+before_install:
+- openssl aes-256-cbc -K $encrypted_b1dc3cb6a724_key -iv $encrypted_b1dc3cb6a724_iv
+  -in deploy_key.enc -out deploy_key -d
+after_success:
+- chmod 600 deploy-key
+- mv deploy-key ~/.ssh/id_rsa
+- git remote add deploy ssh://ci@178.62.103.161/var/repo/met-radar-test-beta.git
+- git push deploy
