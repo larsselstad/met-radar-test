@@ -12,6 +12,3 @@ after_success:
 - mv deploy_key ~/.ssh/id_rsa
 - git remote add deploy ssh://ci@178.62.103.161/var/repo/met-radar-test-beta.git
 - git push deploy
-env:
-  global:
-    secure: VbztFTdSLebYlBQg+MnztYHITiAw6KHk5ksrOc9ZggjwALqnezoCaE6HYLePSAR1hz16LLbl3v15Tw+fmNMSBldKWFfhWjw3gqZoK0cjP4OkALcff+H2kTt18zCTYnkMy53byjY8yQ9ijBstLF8l6gFEldGGvGerPCAvazd94TKvpKybEUD7E6NzY36tHvUzFqXOGPyyBmgHuLaUmdgpAFMU1JANtDtZusrcHCWRM5Pi1WiJ6HXdP0ZsYF2zUeb8uZ+XrkbIKpZaIg8XyDBifQqwTA4ygBgvW4nRmAGT6fVa4Mo35F1VSTP13MPCZh+m3gzE21vPvUZrWtoUQA/Pn45sAYxw0Q9WowhCJX6Yf1L13NZs9hWM8DQbY08l2JoXyzJNUUbZd8DmHcT7VZiiI+L4sEl+Hx1GdQVheu+EeaCxzBD/D53er6FS//GyaKPl/XgiQx37eljjpr4dV3eb4KOtjXrdAeL1Kvf6JpoSLPeowCE6bkOYgm4UQ9aWzgt5LQmDOWD/8SRiBCtq6UGkvpa7VdHPQdHct/LXi4Bgnvj4c7T+5ZFEYRrZpCDT39YRr0C/2u2+z6m+X+CNjMpYXy+nL7lDN9Ob+OdBTbM0VExjWMZwG4vfQyS+MdTM96cyH+9vL73zZPrl3SLij/+oDsF71d3Mkm9y7a38ddl0zfY=
