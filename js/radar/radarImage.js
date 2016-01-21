@@ -52,7 +52,7 @@ function refreshImage(image, that) {
             };
 
             // sets a new src to get the browser to load another image
-            image.src = '/img/loading-img.png';
+            image.src = 'img/loading-img.png';
         };
 
         iframe.src = image.src;
