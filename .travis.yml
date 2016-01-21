@@ -9,7 +9,7 @@ before_install:
   -in deploy_key.enc -out deploy_key -d
 after_success:
 - chmod 600 deploy-key
-- mv deploy-key ~/.ssh/id_rsa
+- mv deploy_key ~/.ssh/id_rsa
 - git remote add deploy ssh://ci@178.62.103.161/var/repo/met-radar-test-beta.git
 - git push deploy
 env:
