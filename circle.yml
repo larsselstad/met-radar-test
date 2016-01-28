@@ -7,4 +7,5 @@ deployment:
   staging:
     branch: dev
     commands:
+      - chmod +x ./deploy-to-beta-circle.sh
       - ./deploy-to-beta-circle.sh
